@@ -47,6 +47,7 @@ if __name__ == "__main__":
   flags.DEFINE_string("feature_names", "mean_rgb", "Name of the feature "
                       "to use for training.")
   flags.DEFINE_string("feature_sizes", "1024", "Length of the feature vectors.")
+  flags.DEFINE_integer("num_classes", 4716, "Number of classes in dataset.")
 
   # Model flags.
   flags.DEFINE_bool(
@@ -562,12 +563,15 @@ def get_reader():
   # Convert feature_names and feature_sizes to lists of values.
   feature_names, feature_sizes = utils.GetListOfFeatureNamesAndSizes(
       FLAGS.feature_names, FLAGS.feature_sizes)
+  num_classes = FLAGS.num_classes
 
   if FLAGS.frame_features:
     reader = readers.YT8MFrameFeatureReader(
+        num_classes=num_classes,
         feature_names=feature_names, feature_sizes=feature_sizes)
   else:
     reader = readers.YT8MAggregatedFeatureReader(
+        num_classes=num_classes,
         feature_names=feature_names, feature_sizes=feature_sizes)
 
   return reader
